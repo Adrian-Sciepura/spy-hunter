@@ -20,6 +20,7 @@ public:
 	static void destroy_instance();
 
 	void update();
+	float get_delta();
 };
 
 #endif

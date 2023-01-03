@@ -30,3 +30,8 @@ void Time_Manager::update()
 	delta = elapsed_ticks * 0.001f;
 	last_update = SDL_GetTicks();
 }
+
+float Time_Manager::get_delta()
+{
+	return this->delta;
+}
