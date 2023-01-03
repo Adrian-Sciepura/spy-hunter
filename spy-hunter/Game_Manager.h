@@ -1,12 +1,13 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
-
+#define _CRT_SECURE_NO_WARNINGS
 #include "./SDL2-2.0.10/include/SDL.h"
 #include "./SDL2-2.0.10/include/SDL_main.h"
 #include "Input_Manager.h"
 #include "Time_Manager.h"
 #include "Entity.h"
 #include "Helper.h"
+#include <cstdio>
 
 class Game_Manager
 {
@@ -16,7 +17,8 @@ private:
 	Time_Manager* time_manager;
 	
 	SDL_Event e;
-	Entity* player;
+	Entity** entities;
+	//int number_of_entities;
 	bool quit;
 
 	Game_Manager();
