@@ -22,29 +22,30 @@ Game_Manager::Game_Manager()
 	input_manager = Input_Manager::get_instance();
 	time_manager = Time_Manager::get_instance();
 	camera_manager = Camera_Manager::get_instance();
+	asset_manager = Asset_Manager::get_instance();
 
 	entities = Entity::get_all_entities();
 	quit = false;
-	SDL_Texture* player_texture = Helper::load_texture("./Assets/car.bmp");
-	SDL_Texture* tree_texture = Helper::load_texture("./Assets/tree.bmp");
 
-	Entity* player = new Entity(player_texture, { 100, 500 }, 80);
-	Entity* tree = new Entity(tree_texture, {300, 80}, 0);
-	Entity* tree2 = new Entity(tree_texture, {230, 180}, 0);
-	Entity* tree3 = new Entity(tree_texture, {300, 280}, 0);
+	Entity* player = new Entity(asset_manager->player_texture, { 100, 500 }, 80);
+	Entity* tree = new Entity(asset_manager->tree_texture, {300, 80}, 0);
+	Entity* tree2 = new Entity(asset_manager->tree_texture, {230, 180}, 0);
+	Entity* tree3 = new Entity(asset_manager->tree_texture, {300, 280}, 0);
 
 	camera_manager->set_target(player);
 }
 
 Game_Manager::~Game_Manager()
 {
-	Input_Manager::destroy_instance();
-	Time_Manager::destroy_instance();
-	Camera_Manager::destroy_instance();
+	input_manager->destroy_instance();
+	time_manager->destroy_instance();
+	camera_manager->destroy_instance();
+	asset_manager->destroy_instance();
 
 	input_manager = nullptr;
 	time_manager = nullptr;
 	camera_manager = nullptr;
+	asset_manager = nullptr;
 
 	Entity::remove_all_entities();
 	entities = nullptr;

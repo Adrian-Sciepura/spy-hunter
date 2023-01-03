@@ -8,6 +8,7 @@
 #include "Input_Manager.h"
 #include "Time_Manager.h"
 #include "Camera_Manager.h"
+#include "Asset_Manager.h"
 
 #include "Entity.h"
 #include "Helper.h"
@@ -18,9 +19,11 @@ class Game_Manager
 {
 private:
 	static Game_Manager* instance;
+
 	Input_Manager* input_manager;
 	Time_Manager* time_manager;
 	Camera_Manager* camera_manager;
+	Asset_Manager* asset_manager;
 	
 	SDL_Event e;
 	Entity** entities;
