@@ -6,12 +6,13 @@
 #include "Vector2.h"
 #include "Helper.h"
 #include "Box_Collider.h"
+#include "Input_Manager.h"
+#include "Time_Manager.h"
 
 class Entity
 {
 private:
 	static Entity** entities;
-	
 
 public:
 	static int number_of_entities;
@@ -22,10 +23,16 @@ public:
 	Vector2 position;
 	SDL_Texture* texture;
 	Box_Collider* collider;
+	float speed;
+	float max_speed;
+	float angle;
+	bool is_moving;
 
-	Entity(SDL_Texture* texture, const Vector2& position);
-	void draw();
+	Entity(SDL_Texture* texture, const Vector2& position, float max_speed);
+	void draw(const Vector2& camera_pos);
 	void update_collisions();
+	//void change_angle();
+	void update_movement();
 
 };
 
