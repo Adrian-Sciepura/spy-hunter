@@ -2,9 +2,9 @@
 
 const float Helper::PI = 3.1416;
 
-//16:10 ASPECT RATIO RESOLUTION
+//4:3 ASPECT RATIO RESOLUTION
 const int Helper::SCREEN_WIDTH = 640;
-const int Helper::SCREEN_HEIGHT = 400;
+const int Helper::SCREEN_HEIGHT = 480;
 const int Helper::SCREEN_SCALE = 2;
 
 SDL_Renderer* Helper::renderer = NULL;
