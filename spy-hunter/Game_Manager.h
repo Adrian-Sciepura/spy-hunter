@@ -9,10 +9,12 @@
 #include "Time_Manager.h"
 #include "Camera_Manager.h"
 #include "Asset_Manager.h"
+#include "Map_Manager.h"
 
 #include "Entity.h"
 #include "Helper.h"
 #include <cstdio>
+
 
 
 class Game_Manager
@@ -24,6 +26,7 @@ private:
 	Time_Manager* time_manager;
 	Camera_Manager* camera_manager;
 	Asset_Manager* asset_manager;
+	Map_Manager* map_manager;
 	
 	SDL_Event e;
 	Entity** entities;

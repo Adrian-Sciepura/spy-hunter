@@ -23,6 +23,7 @@ Game_Manager::Game_Manager()
 	time_manager = Time_Manager::get_instance();
 	camera_manager = Camera_Manager::get_instance();
 	asset_manager = Asset_Manager::get_instance();
+	map_manager = Map_Manager::get_instance();
 
 	entities = Entity::get_all_entities();
 	quit = false;
@@ -41,11 +42,13 @@ Game_Manager::~Game_Manager()
 	time_manager->destroy_instance();
 	camera_manager->destroy_instance();
 	asset_manager->destroy_instance();
+	map_manager->destroy_instance();
 
 	input_manager = nullptr;
 	time_manager = nullptr;
 	camera_manager = nullptr;
 	asset_manager = nullptr;
+	map_manager = nullptr;
 
 	Entity::remove_all_entities();
 	entities = nullptr;
@@ -54,6 +57,7 @@ Game_Manager::~Game_Manager()
 void Game_Manager::run()
 {
 	Entity* player = entities[0];
+	
 
 	while (!quit)
 	{
@@ -62,7 +66,7 @@ void Game_Manager::run()
 				quit = true;
 
 		time_manager->update();
-		input_manager->update();
+		input_manager->update_keyboard();
 
 		player->update_movement();
 		
@@ -81,7 +85,7 @@ void Game_Manager::draw()
 {
 	SDL_SetRenderDrawColor(Helper::renderer, 145, 133, 129, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(Helper::renderer);
-
+	map_manager->get_next_map();
 	int temp = Entity::number_of_entities;
 	for (int i = 0; i < temp; i++)
 	{
