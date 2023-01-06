@@ -7,9 +7,10 @@
 #include "./SDL2-2.0.10/include/SDL_main.h"
 #include "Helper.h"
 #include "Game_Manager.h"
+#include "Map_Editor.h"
 
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
 	bool quit = false;
 	SDL_Event event;
 	SDL_Window *window;
@@ -39,15 +40,27 @@ int main(int argc, char **argv) {
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 	SDL_RenderSetLogicalSize(Helper::renderer, Helper::SCREEN_WIDTH, Helper::SCREEN_HEIGHT);
-	SDL_ShowCursor(SDL_DISABLE);
 
 
-	Game_Manager* game = Game_Manager::get_instance();
-	game->run();
-
-
-	Game_Manager::destroy_instance();
-	game = nullptr;
+	if (argc > 1)
+	{
+		if (strcmp(argv[1], "-map_editor") == 0)
+		{
+			printf("MAP EDITOR \n");
+			Map_Editor* map_editor = Map_Editor::get_instance();
+			map_editor->run();
+			map_editor->destroy_instance();
+			map_editor = nullptr;
+		}
+	}
+	else
+	{
+		SDL_ShowCursor(SDL_DISABLE);
+		Game_Manager* game = Game_Manager::get_instance();
+		game->run();
+		game->destroy_instance();
+		game = nullptr;
+	}
 
 	SDL_DestroyRenderer(Helper::renderer);
 	SDL_DestroyWindow(window);
