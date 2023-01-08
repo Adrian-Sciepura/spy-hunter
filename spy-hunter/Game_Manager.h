@@ -11,7 +11,9 @@
 #include "Asset_Manager.h"
 #include "Map_Manager.h"
 
+#include "Object.h"
 #include "Entity.h"
+#include "Player.h"
 #include "Helper.h"
 #include <cstdio>
 
@@ -29,8 +31,9 @@ private:
 	Map_Manager* map_manager;
 	
 	SDL_Event e;
+	Object* player;
 	//Entity** entities;
-	Dynamic_Array<Entity> entities;
+	//Dynamic_Array<Entity> entities;
 	bool quit;
 
 	Game_Manager();

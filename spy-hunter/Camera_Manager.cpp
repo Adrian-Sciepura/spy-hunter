@@ -42,7 +42,7 @@ void Camera_Manager::update()
 	}
 }
 
-void Camera_Manager::set_target(Entity* entity)
+void Camera_Manager::set_target(Object* entity)
 {
 	this->target = entity;
 }
