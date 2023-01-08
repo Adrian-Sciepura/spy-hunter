@@ -276,5 +276,5 @@ void Map_Editor::render_tile(int index, int x, int y)
 	clip.w = 32;
 	clip.h = 32;
 	
-	Helper::render_texture(asset_manager->tileset, Helper::renderer, x, y, &clip);
+	Helper::render_texture(asset_manager->tileset, x, y, &clip);
 }

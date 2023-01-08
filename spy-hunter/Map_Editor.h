@@ -9,7 +9,6 @@
 #include "./SDL2-2.0.10/include/SDL_main.h"
 
 #include "Helper.h"
-//#include "Dynamic_Array.h"
 #include "Input_Manager.h"
 #include "Asset_Manager.h"
 #include "Map_Manager.h"
