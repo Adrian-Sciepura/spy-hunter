@@ -29,7 +29,8 @@ private:
 	Map_Manager* map_manager;
 	
 	SDL_Event e;
-	Entity** entities;
+	//Entity** entities;
+	Dynamic_Array<Entity> entities;
 	bool quit;
 
 	Game_Manager();
@@ -40,6 +41,7 @@ public:
 	static void destroy_instance();
 	void run();
 	void draw();
+	void update_entities();
 };
 
 #endif

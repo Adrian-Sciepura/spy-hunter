@@ -12,13 +12,13 @@
 class Entity
 {
 private:
-	static Entity** entities;
+	/*static Entity** entities;*/
 
 public:
-	static int number_of_entities;
-	static Entity** get_all_entities();
-	static int get_number_of_entities();
-	static void remove_all_entities();
+	//static int number_of_entities;
+	//static Entity** get_all_entities();
+	//static int get_number_of_entities();
+	//static void remove_all_entities();
 
 	Vector2 position;
 	SDL_Texture* texture;
@@ -29,6 +29,8 @@ public:
 	bool is_moving;
 
 	Entity(SDL_Texture* texture, const Vector2& position, float max_speed);
+	Entity(const Entity& entity);
+	~Entity();
 	void draw(const Vector2& camera_pos);
 	void update_collisions();
 	//void change_angle();

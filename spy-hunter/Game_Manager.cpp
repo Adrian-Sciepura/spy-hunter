@@ -24,16 +24,14 @@ Game_Manager::Game_Manager()
 	camera_manager = Camera_Manager::get_instance();
 	asset_manager = Asset_Manager::get_instance();
 	map_manager = Map_Manager::get_instance();
-
-	entities = Entity::get_all_entities();
 	quit = false;
 
-	Entity* player = new Entity(asset_manager->player_texture, { 100, 500 }, 80);
-	Entity* tree = new Entity(asset_manager->tree_texture, {300, 80}, 0);
-	Entity* tree2 = new Entity(asset_manager->tree_texture, {230, 180}, 0);
-	Entity* tree3 = new Entity(asset_manager->tree_texture, {300, 280}, 0);
+	entities.add({ asset_manager->player_texture, {100, 500}, 80 });
+	entities.add({ asset_manager->tree_texture, {300, 80}, 0 });
+	entities.add({ asset_manager->tree_texture, {230, 180}, 0 });
+	entities.add({ asset_manager->tree_texture, {300, 280}, 0 });
 
-	camera_manager->set_target(player);
+	camera_manager->set_target(&entities.element(0));
 }
 
 Game_Manager::~Game_Manager()
@@ -43,21 +41,10 @@ Game_Manager::~Game_Manager()
 	camera_manager->destroy_instance();
 	asset_manager->destroy_instance();
 	map_manager->destroy_instance();
-
-	input_manager = nullptr;
-	time_manager = nullptr;
-	camera_manager = nullptr;
-	asset_manager = nullptr;
-	map_manager = nullptr;
-
-	Entity::remove_all_entities();
-	entities = nullptr;
 }
 
 void Game_Manager::run()
-{
-	Entity* player = entities[0];
-	
+{	
 
 	while (!quit)
 	{
@@ -68,14 +55,7 @@ void Game_Manager::run()
 		time_manager->update();
 		input_manager->update_keyboard();
 
-		player->update_movement();
-		
-
-		for (int i = 0; i < Entity::number_of_entities; i++)
-		{
-			entities[i]->update_collisions();
-		}
-
+		entities.element(0).update_movement();
 		camera_manager->update();
 		draw();
 	}
@@ -86,11 +66,16 @@ void Game_Manager::draw()
 	SDL_SetRenderDrawColor(Helper::renderer, 145, 133, 129, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(Helper::renderer);
 	map_manager->get_next_map();
-	int temp = Entity::number_of_entities;
-	for (int i = 0; i < temp; i++)
+
+	for (int i = 0; i < entities.size(); i++)
 	{
-		entities[i]->draw(camera_manager->get_camera_pos());
+		entities.element(i).draw(camera_manager->get_camera_pos());
 	}
 
 	SDL_RenderPresent(Helper::renderer);
+}
+
+void Game_Manager::update_entities()
+{
+
 }
