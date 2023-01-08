@@ -1,6 +1,7 @@
 #ifndef DYNAMIC_STRING_H
 #define DYNAMIC_STRING_H
 #include <string.h>
+#include <cstdlib>
 
 class Dynamic_String
 {
@@ -19,6 +20,7 @@ public:
 	Dynamic_String& operator = (const char* source);
 	Dynamic_String& operator = (const Dynamic_String& source);
 	friend Dynamic_String operator + (const Dynamic_String& first_element, const Dynamic_String& second_element);
+	friend Dynamic_String operator + (const Dynamic_String& first_element, int number);
 	operator char* () const;
 };
 

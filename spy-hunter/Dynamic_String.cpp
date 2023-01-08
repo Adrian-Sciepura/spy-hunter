@@ -18,11 +18,6 @@ Dynamic_String::Dynamic_String(const Dynamic_String& source)
 	strcpy(this->string, source.string);
 }
 
-Dynamic_String::Dynamic_String(Dynamic_String&& source)
-{
-	//TODO
-}
-
 Dynamic_String::~Dynamic_String()
 {
 	delete[] string;
@@ -49,7 +44,7 @@ Dynamic_String& Dynamic_String::operator = (const char* source)
 	return *this;
 }
 
-Dynamic_String& Dynamic_String::operator=(const Dynamic_String& source)
+Dynamic_String& Dynamic_String::operator = (const Dynamic_String& source)
 {
 	delete[] this->string;
 	this->string = new char[source.length() + 1];
@@ -67,6 +62,18 @@ Dynamic_String operator+(const Dynamic_String& first_element, const Dynamic_Stri
 	char* tmp = new char[first_element.length() + second_element.length() + 1];
 	strcpy(tmp, first_element.string);
 	strcat(tmp, second_element.string);
+	Dynamic_String ds = tmp;
+	delete[] tmp;
+	return ds;
+}
+
+Dynamic_String operator+(const Dynamic_String& element, int number)
+{
+	char number_as_text[32];
+	_itoa(number, number_as_text, 10);
+	char* tmp = new char[element.length() + strlen(number_as_text) + 1];
+	strcpy(tmp, element.string);
+	strcat(tmp, number_as_text);
 	Dynamic_String ds = tmp;
 	delete[] tmp;
 	return ds;
