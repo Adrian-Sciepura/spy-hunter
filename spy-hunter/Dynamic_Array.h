@@ -3,7 +3,6 @@
 
 #include <malloc.h>
 
-using namespace std;
 template <class T>
 class Dynamic_Array
 {
@@ -17,9 +16,8 @@ public:
 	~Dynamic_Array();
 
 	void resize(int new_size);
-
-	int size();
-	void add(const T& item);
+	int size() const;
+	int add(const T& item);
 	void remove(int index);
 	T& element(int index);
 };
@@ -27,7 +25,7 @@ public:
 #endif
 
 template <class T>
-Dynamic_Array<T>::Dynamic_Array(int initial_size)
+inline Dynamic_Array<T>::Dynamic_Array(int initial_size)
 {
 	this->items = (T**)malloc(initial_size * sizeof(T*));
 	this->capacity = initial_size;
@@ -35,7 +33,7 @@ Dynamic_Array<T>::Dynamic_Array(int initial_size)
 }
 
 template <class T>
-Dynamic_Array<T>::~Dynamic_Array()
+inline Dynamic_Array<T>::~Dynamic_Array()
 {
 	for (int i = 0; i < number_of_elements; i++)
 		delete items[i];
@@ -44,7 +42,7 @@ Dynamic_Array<T>::~Dynamic_Array()
 }
 
 template <class T>
-void Dynamic_Array<T>::resize(int new_size)
+inline void Dynamic_Array<T>::resize(int new_size)
 {
 	if (new_size < capacity)
 		return;
@@ -63,23 +61,24 @@ void Dynamic_Array<T>::resize(int new_size)
 }
 
 template <class T>
-int Dynamic_Array<T>::size()
+inline int Dynamic_Array<T>::size() const
 {
 	return number_of_elements;
 }
 
 template <class T>
-void Dynamic_Array<T>::add(const T& item)
+inline int Dynamic_Array<T>::add(const T& item)
 {
 	if (number_of_elements == capacity)
 		resize(capacity*2);
 
 	items[number_of_elements] = new T(item);
 	number_of_elements++;
+	return (number_of_elements - 1);
 }
 
 template <class T>
-void Dynamic_Array<T>::remove(int index)
+inline void Dynamic_Array<T>::remove(int index)
 {
 	if (index >= number_of_elements)
 		return;
@@ -101,7 +100,7 @@ void Dynamic_Array<T>::remove(int index)
 }
 
 template <class T>
-T& Dynamic_Array<T>::element(int index)
+inline T& Dynamic_Array<T>::element(int index)
 {
 	return *items[index];
 }
