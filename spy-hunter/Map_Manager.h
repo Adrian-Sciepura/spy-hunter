@@ -13,28 +13,28 @@ class Map_Manager
 {
 private:
 	static Map_Manager* instance;
-	Asset_Manager* asset_manager;
 
-	enum tile_type
-	{
-		ROAD,
-		ROAD_SIDE_LEFT,
-		ROAD_SIDE_RIGHT,
-		GRASS,
-		WATER
-	};
-
-	unsigned __int8 tiles_x;
-	unsigned __int8 tiles_y;
-
-	__int8** current_map;
-	__int8** next_map;
-
+	__int8 current_map[15][20];
+	__int8 next_map[15][20];
 
 	Map_Manager();
 	~Map_Manager();
 
 public:
+	enum tile_type
+	{
+		GRASS,
+		GRASS_FLOWERS_YELLOW,
+		GRASS_FLOWERS_RED,
+		ROAD,
+		ROADSIDE_LEFT,
+		ROADSIDE_LEFT_CORNER,
+		ROADSIDE_LEFT_HALF,
+		ROADSIDE_RIGHT,
+		ROADSIDE_RIGHT_CORNER,
+		ROADSIDE_RIGHT_HALF
+	};
+
 	static Map_Manager* get_instance();
 	static void destroy_instance();
 
@@ -44,7 +44,7 @@ public:
 	void generate_next_row();
 	void remove_last_row();
 
-	void load_map_from_file(const Dynamic_String& file_name, __int8**& map);
+	void load_map_from_file(const Dynamic_String& file_name, __int8 map[][20]);
 };
 
 #endif
