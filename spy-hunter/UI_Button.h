@@ -6,26 +6,29 @@
 #include "Helper.h"
 #include "Vector2.h"
 #include "Input_Manager.h"
+#include "Dynamic_String.h"
+#include <cstdio>
+#include "Asset_Manager.h"
 
 class UI_Button
 {
-private:
+private:	
 	SDL_Rect rect;
-	SDL_Color button_color;
-	static Input_Manager* input_manager;
-	static SDL_Rect mouse;
+	SDL_Surface* surface;
+	Dynamic_String text;
 
 public:
 	int id;
+	Uint32 color;
 
-	UI_Button(Vector2 pos, int width, int height, int id);
+	UI_Button(const Dynamic_String& text, Vector2 pos, int width, int height, int id);
 	UI_Button(const UI_Button& source);
 	~UI_Button();
 
-	void update();
+	bool update(Input_Manager* input_manager);
 	void draw();
-	void on_click();
 	void on_hover();
+	void change_text(const Dynamic_String& new_text);
 };
 
 #endif

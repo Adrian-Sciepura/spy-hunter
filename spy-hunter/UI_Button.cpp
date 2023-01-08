@@ -1,11 +1,10 @@
 #include "UI_Button.h"
 
-Input_Manager* UI_Button::input_manager = Input_Manager::get_instance();
-SDL_Rect UI_Button::mouse = Helper::rectangle_creator(1, 1, 1, 1);
-
-UI_Button::UI_Button(Vector2 pos, int width, int height, int id)
+UI_Button::UI_Button(const Dynamic_String& text, Vector2 pos, int width, int height, int id)
 {
-	button_color = Helper::gray;
+	surface = SDL_CreateRGBSurface(0, width, height, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
+	this->text = text;
+	color = SDL_MapRGB(surface->format, 150, 149, 153);
 	rect.x = pos.x;
 	rect.y = pos.y;
 	rect.w = width;
@@ -15,49 +14,50 @@ UI_Button::UI_Button(Vector2 pos, int width, int height, int id)
 
 UI_Button::UI_Button(const UI_Button& source)
 {
-	button_color = Helper::gray;
+	surface = SDL_CreateRGBSurface(0, source.rect.w, source.rect.h, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
+	color = SDL_MapRGB(surface->format, 150, 149, 153);
 	this->rect = source.rect;
+	this->text = source.text;
 	id = source.id;
 }
 
 UI_Button::~UI_Button()
 {
-
+	SDL_FreeSurface(surface);
 }
 
 void UI_Button::draw()
 {
-	Helper::render_rectangle(Helper::renderer, &rect, button_color, true);
+	SDL_FillRect(surface, NULL, color);
+	Helper::render_text(Asset_Manager::get_instance()->font, surface, this->text, true);
+	Helper::render_surface(surface, rect.x, rect.y);
 }
 
-
-void UI_Button::update()
+bool UI_Button::update(Input_Manager* input_manager)
 {
-	Vector2 pos = input_manager->get_mouse_pos();
-	mouse.x = pos.x;
-	mouse.y = pos.y;
-
-	if (SDL_HasIntersection(&rect, &mouse))
+	SDL_Rect m = input_manager->get_mouse_box();
+	if (SDL_HasIntersection(&rect, &m))
 	{
 		on_hover();
-		bool clicked = input_manager->mouse_button_pressed();
+		bool clicked = input_manager->mouse_button_released();
 		if (clicked)
 		{
-			on_click();
+			return true;
 		}
 	}
 	else
 	{
-		button_color = Helper::gray;
+		color = SDL_MapRGB(surface->format, 150, 149, 153);
 	}
-}
-
-void UI_Button::on_click()
-{
-	button_color = Helper::red;
+	return false;
 }
 
 void UI_Button::on_hover()
 {
-	button_color = Helper::light_gray;
+	color = SDL_MapRGB(surface->format, 204, 203, 205);
+}
+
+void UI_Button::change_text(const Dynamic_String& new_text)
+{
+	this->text = new_text;
 }
