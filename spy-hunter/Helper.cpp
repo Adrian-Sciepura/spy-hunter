@@ -39,7 +39,7 @@ const SDL_Color Helper::black = Helper::color_creator(0, 0, 0);
 const SDL_Color Helper::red = Helper::color_creator(255, 0, 0);
 
 
-SDL_Texture* Helper::load_texture(const Dynamic_String& file, SDL_Renderer* renderer)
+SDL_Texture* Helper::load_texture(const Dynamic_String& file)
 {
 	SDL_Surface* tmp = SDL_LoadBMP(file);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, tmp);
@@ -47,17 +47,17 @@ SDL_Texture* Helper::load_texture(const Dynamic_String& file, SDL_Renderer* rend
 	return texture;
 }
 
-SDL_Surface* Helper::load_surface(const Dynamic_String& file, SDL_Renderer* renderer)
+SDL_Surface* Helper::load_surface(const Dynamic_String& file)
 {
 	return nullptr;
 }
 
-void Helper::render_texture(SDL_Texture* texture, SDL_Renderer* renderer, SDL_Rect destination, SDL_Rect* clip)
+void Helper::render_texture(SDL_Texture* texture, SDL_Rect destination, SDL_Rect* clip)
 {
-	SDL_RenderCopy(renderer, texture, clip, &destination);
+	SDL_RenderCopy(Helper::renderer, texture, clip, &destination);
 }
 
-void Helper::render_texture(SDL_Texture* texture, SDL_Renderer* renderer, int x, int y, SDL_Rect* clip)
+void Helper::render_texture(SDL_Texture* texture, int x, int y, SDL_Rect* clip)
 {
 	SDL_Rect dst;
 	dst.x = x;
@@ -69,16 +69,16 @@ void Helper::render_texture(SDL_Texture* texture, SDL_Renderer* renderer, int x,
 	else {
 		SDL_QueryTexture(texture, NULL, NULL, &dst.w, &dst.h);
 	}
-	render_texture(texture, renderer, dst, clip);
+	render_texture(texture, dst, clip);
 }
 
-void Helper::render_rectangle(SDL_Renderer* renderer, const SDL_Rect* rectangle, const SDL_Color& color, bool filled)
+void Helper::render_rectangle(const SDL_Rect* rectangle, const SDL_Color& color, bool filled)
 {
-	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+	SDL_SetRenderDrawColor(Helper::renderer, color.r, color.g, color.b, color.a);
 	if (filled)
-		SDL_RenderFillRect(renderer, rectangle);
+		SDL_RenderFillRect(Helper::renderer, rectangle);
 	else
-		SDL_RenderDrawRect(renderer, rectangle);
+		SDL_RenderDrawRect(Helper::renderer, rectangle);
 }
 
 void Helper::render_text(SDL_Surface* font, SDL_Surface* surface, const Dynamic_String& text, bool centered)
@@ -116,7 +116,7 @@ void Helper::render_text(SDL_Surface* font, SDL_Surface* surface, const Dynamic_
 void Helper::render_surface(SDL_Surface* surface, int x, int y)
 {
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-	render_texture(texture, renderer, x, y, nullptr);
+	render_texture(texture, x, y, nullptr);
 	SDL_DestroyTexture(texture);
 }
 
