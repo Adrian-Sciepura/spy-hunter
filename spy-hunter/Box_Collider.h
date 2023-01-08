@@ -8,19 +8,19 @@
 
 class Box_Collider
 {
-private:
-	void draw();
-
 public:
 	static bool show;
 
-	SDL_Rect* box;
+	SDL_Rect box;
 	Vector2 offset;
 	bool is_colliding;
 
-	Box_Collider(const Vector2& size, const Vector2& offset);
-	~Box_Collider();
+	Box_Collider();
+	Box_Collider(int width, int height, const Vector2& offset);
+	Box_Collider(const Box_Collider& collider);
+
 	void update(const Vector2& object_pos);
+	void draw();
 	bool check_collision(const Box_Collider& collider);
 };
 
