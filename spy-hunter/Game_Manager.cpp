@@ -49,8 +49,15 @@ void Game_Manager::run()
 	while (!quit)
 	{
 		while (SDL_PollEvent(&e) != 0)
+		{
+			if (e.window.event == SDL_WINDOWEVENT_MINIMIZED)
+				while (SDL_WaitEvent(&e))
+					if (e.window.event == SDL_WINDOWEVENT_RESTORED)
+						break;
+
 			if (e.type == SDL_QUIT)
 				quit = true;
+		}
 
 		time_manager->update();
 		input_manager->update_keyboard();
