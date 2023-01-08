@@ -23,10 +23,20 @@ Asset_Manager::Asset_Manager()
 {
 	player_texture = Helper::load_texture("./Assets/car.bmp");
 	tree_texture = Helper::load_texture("./Assets/tree.bmp");
+	tileset = Helper::load_texture("./Assets/tileset.bmp");
+	font = SDL_LoadBMP("./Assets/font.bmp");
+	SDL_SetColorKey(font, true, 0x000000);
 }
 
 Asset_Manager::~Asset_Manager()
-{
+{	
 	SDL_DestroyTexture(player_texture);
 	SDL_DestroyTexture(tree_texture);
+	SDL_DestroyTexture(tileset);
+	SDL_FreeSurface(font);
+}
+
+void Asset_Manager::load_tileset()
+{
+
 }
