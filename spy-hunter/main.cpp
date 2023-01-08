@@ -10,11 +10,12 @@
 #include "Map_Editor.h"
 
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv) 
+{
 	bool quit = false;
 	SDL_Event event;
 	SDL_Window *window;
-
+	
 	if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
 		printf("SDL_Init error");
@@ -38,7 +39,6 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 	SDL_RenderSetLogicalSize(Helper::renderer, Helper::SCREEN_WIDTH, Helper::SCREEN_HEIGHT);
 
 
@@ -50,7 +50,6 @@ int main(int argc, char** argv) {
 			Map_Editor* map_editor = Map_Editor::get_instance();
 			map_editor->run();
 			map_editor->destroy_instance();
-			map_editor = nullptr;
 		}
 	}
 	else
@@ -59,7 +58,6 @@ int main(int argc, char** argv) {
 		Game_Manager* game = Game_Manager::get_instance();
 		game->run();
 		game->destroy_instance();
-		game = nullptr;
 	}
 
 	SDL_DestroyRenderer(Helper::renderer);
