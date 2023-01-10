@@ -9,10 +9,13 @@
 class Helper
 {
 public:
-	static const float PI;
-	static const int SCREEN_WIDTH, SCREEN_HEIGHT;
-	static const float SCREEN_SCALE;
-	static const int TILES_X, TILES_Y;
+	static constexpr float PI = 3.1416;
+	static constexpr int SCREEN_WIDTH = 640;
+	static constexpr int SCREEN_HEIGHT = 480;
+	static constexpr float SCREEN_SCALE = 1.5;
+	static constexpr int TILES_X = SCREEN_WIDTH / 32;
+	static constexpr int TILES_Y = SCREEN_HEIGHT / 32;
+
 	static SDL_Renderer* renderer;
 
 	static SDL_Color color_creator(Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255);

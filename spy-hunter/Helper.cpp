@@ -1,17 +1,6 @@
 #include "Helper.h"
 
-const float Helper::PI = 3.1416;
-
-//4:3 ASPECT RATIO RESOLUTION
-const int Helper::SCREEN_WIDTH = 640;	//850
-const int Helper::SCREEN_HEIGHT = 480;	//500
-const float Helper::SCREEN_SCALE = 1.5;
-
-const int Helper::TILES_X = SCREEN_WIDTH / 32;
-const int Helper::TILES_Y = SCREEN_HEIGHT / 32;
-
 SDL_Renderer* Helper::renderer = NULL;
-
 
 SDL_Color Helper::color_creator(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
@@ -43,7 +32,7 @@ SDL_Texture* Helper::load_texture(const Dynamic_String& file)
 {
 	SDL_Surface* tmp = SDL_LoadBMP(file);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, tmp);
-	
+	SDL_FreeSurface(tmp);
 	return texture;
 }
 
