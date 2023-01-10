@@ -31,9 +31,7 @@ private:
 	Map_Manager* map_manager;
 	
 	SDL_Event e;
-	Object* player;
-	//Entity** entities;
-	//Dynamic_Array<Entity> entities;
+	Dynamic_Array<Object*> objects;
 	bool quit;
 
 	Game_Manager();
@@ -42,10 +40,9 @@ private:
 public:
 	static Game_Manager* get_instance();
 	static void destroy_instance();
+
 	void run();
 	void draw();
-	void update_entities();
 };
 
 #endif
-

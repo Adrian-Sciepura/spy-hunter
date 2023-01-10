@@ -26,15 +26,10 @@ Game_Manager::Game_Manager()
 	map_manager = Map_Manager::get_instance();
 	quit = false;
 
-	//player = new Object({ 100, 100 }, 60, 80, true, asset_manager->player_texture);
-	player = new Player({ 100, 100 }, 60, 80, true, 20, asset_manager->player_texture);
-	//static_cast<Entity*>(player)->is_moving = true;
-	//static_cast<Entity*>(player)->speed = 40;
-	//player->speed = 50;
-	//entities.add({ asset_manager->player_texture, {100, 500}, 80 });
-	//entities.add({ asset_manager->tree_texture, {300, 80}, 0 });
-	//entities.add({ asset_manager->tree_texture, {230, 180}, 0 });
-	//entities.add({ asset_manager->tree_texture, {300, 280}, 0 });
+	Player* player = new Player({ 100, 300 }, 60, 80, true, 300, asset_manager->player_texture);
+	Object* tree = new Object({ 300.0, 80.0 }, 30, 60, true, asset_manager->tree_texture);
+	objects.add(tree);
+	objects.add(player);
 
 	camera_manager->set_target(player);
 }
@@ -46,8 +41,16 @@ Game_Manager::~Game_Manager()
 	camera_manager->destroy_instance();
 	asset_manager->destroy_instance();
 	map_manager->destroy_instance();
-	delete player;
+	
+	for (int i = 0; i < objects.size(); i++)
+	{
+		delete objects.element(i);
+	}
 }
+
+
+//---------------------------------
+
 
 void Game_Manager::run()
 {	
@@ -67,8 +70,13 @@ void Game_Manager::run()
 
 		time_manager->update();
 		input_manager->update_keyboard();
-		player->update();
-		//entities.element(0).update_movement();
+
+		for (int i = 0; i < objects.size(); i++)
+		{
+			objects.element(i)->update();
+		}
+
+		map_manager->update(camera_manager->get_camera_pos().y);
 		camera_manager->update();
 		draw();
 	}
@@ -76,19 +84,15 @@ void Game_Manager::run()
 
 void Game_Manager::draw()
 {
+	SDL_SetRenderTarget(Helper::renderer, NULL);
 	SDL_SetRenderDrawColor(Helper::renderer, 145, 133, 129, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(Helper::renderer);
-	map_manager->get_next_map();
+	map_manager->display_map();
 
-	//for (int i = 0; i < entities.size(); i++)
-	//{
-	//	entities.element(i).draw(camera_manager->get_camera_pos());
-	//}
-	player->draw(camera_manager->get_camera_pos());
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects.element(i)->draw(camera_manager->get_camera_pos());
+	}
+
 	SDL_RenderPresent(Helper::renderer);
-}
-
-void Game_Manager::update_entities()
-{
-
 }
