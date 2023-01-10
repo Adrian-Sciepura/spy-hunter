@@ -16,25 +16,27 @@ void Player::update_movement()
 	if (input->key_pressed(SDL_SCANCODE_UP))
 	{
 		is_moving = true;
+		if(speed + 0.5 <= max_speed)
+			speed += 0.5;
 
-		speed += 0.5;
 		if (input->key_pressed(SDL_SCANCODE_LEFT))
-			angle = 135;
+			angle = 110;
 		else if (input->key_pressed(SDL_SCANCODE_RIGHT))
-			angle = 45;
+			angle = 70;
 		else
 			angle = 90;
 	}
 	else if (input->key_pressed(SDL_SCANCODE_DOWN))
 	{
-		speed -= 0.5;
+		if(speed - 0.5 >= 0)
+			speed -= 0.5;
 	}
 	else if (is_moving)
 	{
 		if (input->key_pressed(SDL_SCANCODE_LEFT))
-			angle = 135;
+			angle = 110;
 		else if (input->key_pressed(SDL_SCANCODE_RIGHT))
-			angle = 45;
+			angle = 70;
 		else
 			angle = 90;
 	}
