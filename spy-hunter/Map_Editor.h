@@ -65,6 +65,8 @@ public:
 	void change_tile();
 	void search_for_files();
 	void save_map();
+	bool check_compatibility_of_two_maps(FILE*& map1, FILE*& map2);
+	void check_row(int row, Dynamic_Array<__int8>& length, Dynamic_Array<__int8>& distance);
 	void fill_empty_map(__int8 map[][20]);
 	void add_file_button();
 	void render_tile(int index, int x, int y);

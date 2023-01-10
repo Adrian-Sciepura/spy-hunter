@@ -51,7 +51,9 @@ Map_Editor::~Map_Editor()
 	map_manager->destroy_instance();
 }
 
-//-----------------------
+
+//-------------------------------
+
 
 void Map_Editor::run()
 {
@@ -107,6 +109,7 @@ void Map_Editor::run()
 
 void Map_Editor::draw()
 {
+	SDL_SetRenderTarget(Helper::renderer, NULL);
 	SDL_SetRenderDrawColor(Helper::renderer, 145, 133, 129, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(Helper::renderer);
 
@@ -233,10 +236,27 @@ void Map_Editor::save_map()
 	if (currently_open_map_index == -1)
 		return;
 
-		
-
 	FILE* file;
 	file = fopen(files.element(currently_open_map_index), "wb");
+	Dynamic_Array<__int8> length(2);
+	Dynamic_Array<__int8> distance(2);
+	__int8 temp = 0;
+
+	for (int i = 0; i < 15; i++)
+	{
+		check_row(i, length, distance);
+		printf("Row number: %d, has %d roads\n", i, length.size());
+		temp = length.size();
+		fwrite(&temp, sizeof(__int8), 1, file);
+		for (int i = 0; i < temp; i++)
+		{
+			fwrite(&distance.element(i), sizeof(__int8), 1, file);
+			fwrite(&length.element(i), sizeof(__int8), 1, file);
+		}
+		length.clear();
+		distance.clear();
+	}
+
 
 	for (int i = 0; i < 15; i++)
 	{
@@ -247,9 +267,118 @@ void Map_Editor::save_map()
 	}
 
 	fclose(file);
+
+	FILE* dependencies = fopen("./Assets/maps/maps_dependencies.bin", "wb");
+	FILE* map1, * map2;
+	for (int i = 0; i < files.size(); i++)
+	{
+		map1 = fopen(files.element(i), "rb");
+		for (int j = 0; j < files.size(); j++)
+		{
+			rewind(map1);
+			map2 = fopen(files.element(j), "rb");
+
+			if (check_compatibility_of_two_maps(map1, map2))
+			{
+				fwrite(&i, sizeof(__int8), 1, dependencies);
+				fwrite(&j, sizeof(__int8), 1, dependencies);
+				printf("Map: %s, is compatible with map: %s\n", files.element(i), files.element(j));
+			}
+			fclose(map2);
+		}
+		fclose(map1);
+	}
+	__int8 eof = -1;
+	fwrite(&eof, sizeof(__int8), 1, dependencies);
+	fclose(dependencies);
 }
 
+bool Map_Editor::check_compatibility_of_two_maps(FILE*& map1, FILE*& map2)
+{
+	__int8 map1_roads = 0;
+	__int8 map2_roads = 0;
 
+	for (int i = 0; i < 14; i++)
+	{
+		fread(&map2_roads, sizeof(__int8), 1, map2);
+		for (int j = 0; j < map2_roads; j++)
+		{
+			fseek(map2, 2 * sizeof(__int8), SEEK_CUR);
+		}
+	}
+
+	fread(&map1_roads, sizeof(__int8), 1, map1);
+	fread(&map2_roads, sizeof(__int8), 1, map2);
+
+	if (map1_roads != map2_roads)
+		return false;
+
+
+	__int8 map1_val;
+	__int8 map2_val;
+	bool flag = true;
+
+	for (int i = 0; i < map1_roads*2; i++)
+	{
+		fread(&map1_val, sizeof(__int8), 1, map1);
+		fread(&map2_val, sizeof(__int8), 1, map2);
+		if (map1_val != map2_val)
+		{
+			flag = false;
+			break;
+		}
+	}
+
+	if (!flag)
+		return false;
+
+	return true;
+}
+
+void Map_Editor::check_row(int row, Dynamic_Array<__int8>& length, Dynamic_Array<__int8>& distance)
+{
+	int counter = 0;
+	__int8 last_index = -1;
+	int road_index_start = Map_Manager::tile_type::ROAD;
+	int road_index_end = Map_Manager::tile_type::ROADSIDE_RIGHT_HALF;
+
+	for (int i = 0; i < 20; i++)
+	{
+		//printf("%d", tiles[row][i]);
+		if(tiles[row][i] >= road_index_start && tiles[row][i] <= road_index_end)
+		{
+			if (last_index >= road_index_start && last_index <= road_index_end)
+			{
+				counter++;
+			}
+			else
+			{
+				counter++;
+				distance.add(i);
+			}
+		}
+		else
+		{
+			if (last_index >= road_index_start && last_index <= road_index_end)
+			{
+				length.add(counter);
+				counter = 0;
+			}
+		}
+		last_index = tiles[row][i];
+	}
+
+	if (counter > 0)
+	{
+		length.add(counter);
+	}
+
+	//printf("Row number: %d, has %d roads, their data: \n", row, distance.size());
+	//for (int i = 0; i < distance.size(); i++)
+	//{
+	//	printf("%d Distance: %d, length: %d\n", i, distance.element(i), length.element(i));
+	//}
+}
 
 void Map_Editor::fill_empty_map(__int8 map[][20])
 {
