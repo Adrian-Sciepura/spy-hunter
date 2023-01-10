@@ -6,21 +6,27 @@
 #include "./SDL2-2.0.10/include/SDL_main.h"
 #include "Helper.h"
 #include "Dynamic_String.h"
-#include <cstdio>
 #include "Asset_Manager.h"
+#include <cstdio>
+#include <time.h>
 
 class Map_Manager
 {
 private:
 	static Map_Manager* instance;
 
-	__int8 current_map[15][20];
-	__int8 next_map[15][20];
+	SDL_Texture* current_map_texture;
+	SDL_Texture* next_map_texture;
+	__int8 map_buffer[15][20];
+	int current_map_id;
+	int row_in_next_map;
+	int camera_move;
 
 	Map_Manager();
 	~Map_Manager();
 
 public:
+	int last_camera_y_pos;
 	enum tile_type
 	{
 		GRASS,
@@ -38,11 +44,12 @@ public:
 	static Map_Manager* get_instance();
 	static void destroy_instance();
 
+	void update(int camera_y_pos);
+	void display_map();
+	void render_tile(int index, int x, int y);
+	void prepare_texture(SDL_Texture*& texture);
+	void change_next_map();
 	void get_next_map();
-	void remove_previous_map();
-
-	void generate_next_row();
-	void remove_last_row();
 
 	void load_map_from_file(const Dynamic_String& file_name, __int8 map[][20]);
 };
