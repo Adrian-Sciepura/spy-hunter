@@ -19,6 +19,7 @@ public:
 	int size() const;
 	int add(const T& item);
 	void remove(int index);
+	void clear();
 	T& element(int index);
 };
 
@@ -100,10 +101,17 @@ inline void Dynamic_Array<T>::remove(int index)
 }
 
 template <class T>
+inline void Dynamic_Array<T>::clear()
+{
+	for (int i = 0; i < this->size(); i++)
+	{
+		delete this->items[i];
+	}
+	this->number_of_elements = 0;
+}
+
+template <class T>
 inline T& Dynamic_Array<T>::element(int index)
 {
 	return *items[index];
 }
-
-
-
