@@ -17,6 +17,7 @@ public:
 	//friend Vector2 operator + (const Vector2& first_element, int number);
 	friend Vector2 operator - (const Vector2& first_element, const Vector2& second_element);
 	Vector2& operator -= (const Vector2& vector);
+	friend bool operator == (const Vector2& first_vector, const Vector2& second_vector);
 	//friend Vector2 operator - (const Vector2& first_element, int number);
 };
 
