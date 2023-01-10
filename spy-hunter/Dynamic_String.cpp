@@ -36,6 +36,10 @@ char Dynamic_String::value_at(int index) const
 		return this->string[index];
 }
 
+
+//OPERATOR OVERLOADING
+
+
 Dynamic_String& Dynamic_String::operator = (const char* source)
 {
 	delete[] this->string;
@@ -52,12 +56,7 @@ Dynamic_String& Dynamic_String::operator = (const Dynamic_String& source)
 	return *this;
 }
 
-Dynamic_String::operator char* () const
-{
-	return this->string;
-}
-
-Dynamic_String operator+(const Dynamic_String& first_element, const Dynamic_String& second_element)
+Dynamic_String operator + (const Dynamic_String& first_element, const Dynamic_String& second_element)
 {
 	char* tmp = new char[first_element.length() + second_element.length() + 1];
 	strcpy(tmp, first_element.string);
@@ -77,4 +76,9 @@ Dynamic_String operator+(const Dynamic_String& element, int number)
 	Dynamic_String ds = tmp;
 	delete[] tmp;
 	return ds;
+}
+
+Dynamic_String::operator char* () const
+{
+	return this->string;
 }

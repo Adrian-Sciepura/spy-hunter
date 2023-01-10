@@ -1,7 +1,5 @@
 #include "Asset_Manager.h"
 
-//SINGLETON DESIGN PATTERN
-
 Asset_Manager* Asset_Manager::instance = nullptr;
 
 Asset_Manager* Asset_Manager::get_instance()
@@ -34,9 +32,4 @@ Asset_Manager::~Asset_Manager()
 	SDL_DestroyTexture(tree_texture);
 	SDL_DestroyTexture(tileset);
 	SDL_FreeSurface(font);
-}
-
-void Asset_Manager::load_tileset()
-{
-
 }

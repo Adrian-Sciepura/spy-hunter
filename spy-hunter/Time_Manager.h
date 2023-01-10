@@ -14,6 +14,7 @@ private:
 	int elapsed_ticks;
 
 	Time_Manager();
+	~Time_Manager();
 
 public:
 	static Time_Manager* get_instance();
@@ -24,4 +25,3 @@ public:
 };
 
 #endif
-

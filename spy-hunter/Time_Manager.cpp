@@ -24,6 +24,15 @@ Time_Manager::Time_Manager()
 	elapsed_ticks = 0;
 }
 
+Time_Manager::~Time_Manager()
+{
+
+}
+
+
+//-----------------------------------
+
+
 void Time_Manager::update()
 {
 	elapsed_ticks = SDL_GetTicks() - last_update;

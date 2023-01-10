@@ -20,8 +20,8 @@ public:
 	Box_Collider(const Box_Collider& collider);
 
 	void update(const Vector2& object_pos);
-	void draw();
 	bool check_collision(const Box_Collider& collider);
+	void draw();
 };
 
 #endif

@@ -7,11 +7,11 @@ class Dynamic_String
 {
 private:
 	char* string;
+
 public:
 	Dynamic_String();
 	Dynamic_String(const char* source);
 	Dynamic_String(const Dynamic_String& source);
-	Dynamic_String(Dynamic_String&& source);
 	~Dynamic_String();
 
 	int length() const;
@@ -25,4 +25,3 @@ public:
 };
 
 #endif
-

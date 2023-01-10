@@ -14,7 +14,6 @@ private:
 	Asset_Manager();
 	~Asset_Manager();
 
-	void load_tileset();
 public:
 	static Asset_Manager* get_instance();
 	static void destroy_instance();
@@ -22,7 +21,6 @@ public:
 	SDL_Texture* player_texture;
 	SDL_Texture* tree_texture;
 	SDL_Texture* tileset;
-	Dynamic_Array<SDL_Rect> tileset_info;
 	SDL_Surface* font;
 };
 

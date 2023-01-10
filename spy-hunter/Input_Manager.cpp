@@ -35,6 +35,10 @@ Input_Manager::~Input_Manager()
 
 }
 
+
+//--------------------------------------
+
+
 void Input_Manager::update_keyboard()
 {
 	keyboard_state = SDL_GetKeyboardState(NULL);
