@@ -28,11 +28,14 @@ Input_Manager::Input_Manager()
 	mouse_box.h = 1;
 	mouse_box.x = 0;
 	mouse_box.y = 0;
+	keyboard_state = SDL_GetKeyboardState(&number_of_keys);
+	previous_keyboard_state = new Uint8[number_of_keys];
+	memcpy(previous_keyboard_state, keyboard_state, number_of_keys);
 }
 
 Input_Manager::~Input_Manager()
 {
-
+	delete previous_keyboard_state;
 }
 
 
@@ -41,12 +44,17 @@ Input_Manager::~Input_Manager()
 
 void Input_Manager::update_keyboard()
 {
-	keyboard_state = SDL_GetKeyboardState(NULL);
+	memcpy(previous_keyboard_state, keyboard_state, number_of_keys);
 }
 
 bool Input_Manager::key_pressed(SDL_Scancode key)
 {
 	return (keyboard_state[key] != 0);
+}
+
+bool Input_Manager::key_released(SDL_Scancode key)
+{
+	return ((previous_keyboard_state[key] != 0) && (keyboard_state[key] == 0));
 }
 
 void Input_Manager::update_mouse()
