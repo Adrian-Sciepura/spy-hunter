@@ -4,7 +4,6 @@
 #include "./SDL2-2.0.10/include/SDL.h"
 #include "./SDL2-2.0.10/include/SDL_main.h"
 #include "Helper.h"
-#include "Dynamic_Array.h"
 #include <cstdio>
 
 class Asset_Manager
@@ -19,7 +18,9 @@ public:
 	static void destroy_instance();
 
 	SDL_Texture* player_texture;
-	SDL_Texture* tree_texture;
+	SDL_Texture* enemy_texture;
+	SDL_Texture* neutral_texture;
+	SDL_Texture* bullet_texture;
 	SDL_Texture* tileset;
 	SDL_Surface* font;
 };
