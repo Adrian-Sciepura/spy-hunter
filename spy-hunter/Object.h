@@ -10,19 +10,37 @@
 class Object
 {
 public:
+	enum Object_Type
+	{
+		MAP_ELEMENT,
+		BULLET,
+		PLAYER,
+		ENEMY,
+		NEUTRAL
+	};
+
+	static Dynamic_Array<Object*> all_objects;
+	static constexpr int delete_range = Helper::SCREEN_HEIGHT + 100;
+	static void cleanup();
+
+	Object_Type type;
 	Vector2 position;
 	SDL_Texture* texture;
-	Box_Collider collider;
+	Dynamic_Array<Box_Collider*> colliders;
+	Dynamic_Array<Object*> collisions;
 	bool is_solid;
 	int width;
 	int height;
+	int all_collisions;
+	int health;
 
-	Object(const Vector2& position, int width, int height, bool is_solid, SDL_Texture* texture = nullptr);
+	Object(Object_Type type, const Vector2& position, int width, int height, bool is_solid, SDL_Texture* texture = nullptr);
 	Object(const Object& object);
+	virtual ~Object();
 
 	virtual void update();
-	//void update_collisions();
-	void draw(const Vector2& camera_pos);
+	virtual void update_collisions(int collider_index);
+	void draw();
 };
 
 #endif
