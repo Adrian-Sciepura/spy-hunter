@@ -1,6 +1,12 @@
 #include "Helper.h"
 
 SDL_Renderer* Helper::renderer = NULL;
+SDL_Window* Helper::window = NULL;
+Vector2 Helper::camera_pos = {};
+
+int Helper::score = 0;
+float Helper::score_freeze_time = 0.0f;
+float Helper::infinite_life_timer = 30.0f;
 
 SDL_Color Helper::color_creator(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {

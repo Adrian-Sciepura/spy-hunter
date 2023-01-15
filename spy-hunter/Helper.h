@@ -4,6 +4,7 @@
 #include "./SDL2-2.0.10/include/SDL.h"
 #include "./SDL2-2.0.10/include/SDL_main.h"
 #include "Dynamic_String.h"
+#include "Dynamic_Array.h"
 #include "Vector2.h"
 
 class Helper
@@ -15,8 +16,14 @@ public:
 	static constexpr float SCREEN_SCALE = 1.5;
 	static constexpr int TILES_X = SCREEN_WIDTH / 32;
 	static constexpr int TILES_Y = SCREEN_HEIGHT / 32;
+	static constexpr float FRAME_DELAY = 1.0 / 90.0;
 
 	static SDL_Renderer* renderer;
+	static SDL_Window* window;
+	static Vector2 camera_pos;
+	static int score;
+	static float score_freeze_time;
+	static float infinite_life_timer;
 
 	static SDL_Color color_creator(Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255);
 	static SDL_Rect rectangle_creator(int x, int y, int w, int h);
