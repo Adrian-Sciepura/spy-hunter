@@ -19,6 +19,8 @@ void Time_Manager::destroy_instance()
 
 Time_Manager::Time_Manager()
 {
+	start_ticks = SDL_GetTicks();
+	stop = false;
 	delta = 0.0f;
 	last_update = 0;
 	elapsed_ticks = 0;
@@ -38,6 +40,27 @@ void Time_Manager::update()
 	elapsed_ticks = SDL_GetTicks() - last_update;
 	delta = elapsed_ticks * 0.001f;
 	last_update = SDL_GetTicks();
+
+	if (stop)
+	{
+		delta = 0;
+		start_ticks += elapsed_ticks;
+	}
+}
+
+void Time_Manager::pause()
+{
+	stop = !stop;
+}
+
+void Time_Manager::restart()
+{
+	start_ticks = SDL_GetTicks();
+}
+
+float Time_Manager::get_elapsed_time()
+{
+	return (last_update - start_ticks) * 0.001f;
 }
 
 float Time_Manager::get_delta()
