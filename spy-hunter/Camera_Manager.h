@@ -11,7 +11,6 @@ class Camera_Manager
 {
 private:
 	static Camera_Manager* instance;
-	Vector2 pos;
 	int width, height;
 	Object* target;
 	
