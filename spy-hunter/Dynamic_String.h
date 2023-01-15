@@ -21,6 +21,7 @@ public:
 	Dynamic_String& operator = (const Dynamic_String& source);
 	friend Dynamic_String operator + (const Dynamic_String& first_element, const Dynamic_String& second_element);
 	friend Dynamic_String operator + (const Dynamic_String& first_element, int number);
+	friend Dynamic_String operator + (const Dynamic_String& first_element, float number);
 	operator char* () const;
 };
 

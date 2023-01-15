@@ -78,6 +78,18 @@ Dynamic_String operator+(const Dynamic_String& element, int number)
 	return ds;
 }
 
+Dynamic_String operator+(const Dynamic_String& element, float number)
+{
+	char number_as_text[32];
+	_itoa(number, number_as_text, 10);
+	char* tmp = new char[element.length() + strlen(number_as_text) + 1];
+	strcpy(tmp, element.string);
+	strcat(tmp, number_as_text);
+	Dynamic_String ds = tmp;
+	delete[] tmp;
+	return ds;
+}
+
 Dynamic_String::operator char* () const
 {
 	return this->string;
