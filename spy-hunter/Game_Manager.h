@@ -14,10 +14,13 @@
 #include "Object.h"
 #include "Entity.h"
 #include "Player.h"
+#include "AI_Vehicle.h"
+#include "Enemy.h"
+#include "Neutral.h"
 #include "Helper.h"
+
 #include <cstdio>
-
-
+#include <cstring>
 
 class Game_Manager
 {
@@ -29,11 +32,18 @@ private:
 	Camera_Manager* camera_manager;
 	Asset_Manager* asset_manager;
 	Map_Manager* map_manager;
-	
-	SDL_Event e;
-	Dynamic_Array<Object*> objects;
-	bool quit;
 
+	SDL_Surface* realized_points;
+	SDL_Surface* header;
+	char header_text[100];
+
+	Player* player;
+	SDL_Event e;
+
+	bool pause;
+	bool minimized_window;
+	bool quit;
+	
 	Game_Manager();
 	~Game_Manager();
 
@@ -41,8 +51,14 @@ public:
 	static Game_Manager* get_instance();
 	static void destroy_instance();
 
+
 	void run();
+	void early_update();
+	void update();
+	void late_update();
 	void draw();
+
+	void spawn_cars();
 };
 
 #endif
