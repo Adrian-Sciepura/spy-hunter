@@ -20,14 +20,17 @@ void Map_Manager::destroy_instance()
 Map_Manager::Map_Manager()
 {
 	srand(time(NULL));
-	row_in_next_map = 0;
 	camera_move = 0;
 	last_camera_y_pos = 0;
+	map_count = -1;
 	load_map_from_file("./Assets/maps/map0.bin", map_buffer);
 	prepare_texture(current_map_texture);
+	map_count = 0;
 	load_map_from_file("./Assets/maps/map1.bin", map_buffer);
 	prepare_texture(next_map_texture);
-	current_map_id = 1;
+	map_count = 1;
+	current_map_id = 0;
+	next_map_id = 1;
 	
 }
 
@@ -39,73 +42,44 @@ Map_Manager::~Map_Manager()
 
 //-------------------------------
 
-void Map_Manager::update(int camera_y_pos)
+void Map_Manager::update()
 {
-	if (camera_y_pos != last_camera_y_pos)
+	if (Helper::camera_pos.y != last_camera_y_pos)
 	{
-		camera_move += camera_y_pos - last_camera_y_pos;
-		last_camera_y_pos = camera_y_pos;
-		if (camera_move <= -32)
+		camera_move += Helper::camera_pos.y - last_camera_y_pos;
+		last_camera_y_pos = Helper::camera_pos.y;
+
+		if (camera_move <= -480.0)
 		{
-			camera_move = 0;
-			row_in_next_map += 1;
+			camera_move += 480.0;
+			change_next_map();
+			map_count++;
+
+			if(Helper::score_freeze_time <= 0)
+				Helper::score += 100;
 		}
-		//printf("Camera y move: %d\n", camera_move);
 	}
 }
 
+void Map_Manager::restart()
+{
+	camera_move = 0;
+	last_camera_y_pos = 0;
+	map_count = -1;
+	load_map_from_file("./Assets/maps/map0.bin", map_buffer);
+	prepare_texture(current_map_texture);
+	map_count = 0;
+	load_map_from_file("./Assets/maps/map1.bin", map_buffer);
+	prepare_texture(next_map_texture);
+	map_count = 1;
+	current_map_id = 0;
+	next_map_id = 1;
+}
 
 void Map_Manager::display_map()
 {
-	if (row_in_next_map >= 15)
-	{
-		change_next_map();
-		row_in_next_map = 0;
-	}
-		
-
-	////int row = 0;
-	////for (int i = 0; i < 20; i++)
-	////{
-	////	render_tile(next_map[14 - row_in_next_map][i], i * 32, abs(camera_move)-32);
-	////}
-
-	//for (int i = 15 - row_in_next_map-1; i < 15; i++)
-	//{
-	//	for (int j = 0; j < 20; j++)
-	//	{
-	//		render_tile(next_map[i][j], j * 32, row * 32 - camera_move-32);
-	//	}
-	//	row++;
-	//}
-
-	//for (int i = 0; i < 15 - row_in_next_map; i++)
-	//{
-	//	for (int j = 0; j < 20; j++)
-	//	{
-	//		render_tile(current_map[i][j], j * 32, row * 32 - camera_move-32);
-	//	}
-	//	row++;
-	//}
-
-	//SDL_Rect n_map;
-	//SDL_Rect c_map;
-	//n_map.x = 0;
-	//n_map.y = (15 - row_in_next_map)*32;
-	//n_map.w = 640;
-	//n_map.h = row_in_next_map * 32;
-
-	//c_map.x = 0;
-	//c_map.y = row_in_next_map * 32;;
-	//c_map.w = 640;
-	//c_map.h = (15 - row_in_next_map) * 32;
-	
-	
-	//Helper::render_texture(next_map_texture, 0, -camera_move, &n_map);
-	//Helper::render_texture(current_map_texture, 0, row_in_next_map * 32 - camera_move, &c_map);
-
-	Helper::render_texture(next_map_texture, 0, (row_in_next_map - 15) * 32 - camera_move, nullptr);
-	Helper::render_texture(current_map_texture, 0, row_in_next_map * 32 - camera_move, nullptr);
+	Helper::render_texture(next_map_texture, 0, -map_count*480-Helper::camera_pos.y, nullptr);
+	Helper::render_texture(current_map_texture, 0, -(map_count-1)*480-Helper::camera_pos.y, nullptr);
 }
 
 void Map_Manager::render_tile(int index, int x, int y)
@@ -135,12 +109,11 @@ void Map_Manager::prepare_texture(SDL_Texture*& texture)
 	SDL_SetRenderTarget(Helper::renderer, NULL);
 }
 
-
 void Map_Manager::change_next_map()
 {
 	get_next_map();
 	Dynamic_String path = "./Assets/maps/map";
-	load_map_from_file(path + current_map_id + ".bin", map_buffer);
+	load_map_from_file(path + next_map_id + ".bin", map_buffer);
 	SDL_DestroyTexture(current_map_texture);
 	current_map_texture = next_map_texture;
 	next_map_texture = nullptr;
@@ -170,10 +143,9 @@ void Map_Manager::get_next_map()
 		compatible_maps.add(value);
 	}
 	fclose(dependencies);
-
-	current_map_id = rand() % compatible_maps.size();
+	current_map_id = next_map_id;
+	next_map_id = rand() % compatible_maps.size();
 }
-
 
 void Map_Manager::load_map_from_file(const Dynamic_String& file_name, __int8 map[][20])
 {
@@ -183,17 +155,31 @@ void Map_Manager::load_map_from_file(const Dynamic_String& file_name, __int8 map
 	if (file == NULL)
 		return;
 
-	__int8 temp = 0;
-	__int8 temp2 = 0;
+	__int8 number_of_roads = 0;
+	__int8 distance_from_left_edge = 0;
+	__int8 road_width = 0;
 	
 	
 	for (int i = 0; i < 15; i++)
 	{
-		fread(&temp, sizeof(__int8), 1, file);
-		for (int j = 0; j < temp; j++)
+		fread(&number_of_roads, sizeof(__int8), 1, file);
+		for (int j = 0; j < number_of_roads; j++)
 		{
-			fread(&temp2, sizeof(__int8), 1, file);
-			fread(&temp2, sizeof(__int8), 1, file);
+			fread(&distance_from_left_edge, sizeof(__int8), 1, file);
+			fread(&road_width, sizeof(__int8), 1, file);
+
+			Object* left = new Object(Object::Object_Type::MAP_ELEMENT, { 0.0f, (i * 32.0f) - (map_count+1) * 480 }, 
+				distance_from_left_edge * 32, 32, true, nullptr);
+
+			Object::all_objects.add(left);
+			if (j == number_of_roads - 1)
+			{
+				int temp = distance_from_left_edge + road_width;
+				Object* right = new Object(Object::Object_Type::MAP_ELEMENT, {temp * 32.0f, (i * 32.0f) - (map_count + 1) * 480},
+					(20-temp) * 32, 32, true, nullptr);
+
+				Object::all_objects.add(right);
+			}
 		}
 	}
 
@@ -210,3 +196,37 @@ void Map_Manager::load_map_from_file(const Dynamic_String& file_name, __int8 map
 	fclose(file);
 }
 
+void Map_Manager::get_safe_area_to_spawn(Dynamic_Array<int>& distance, Dynamic_Array<int>& width, Object* object)
+{
+	int current_row = -camera_move / 32;
+
+	if (object != nullptr)
+		current_row = (object->position.y - Helper::camera_pos.y) / 32;
+
+	Dynamic_String path = "./Assets/maps/map";
+	FILE* file = fopen(path + current_map_id + ".bin", "rb");
+
+	__int8 number_of_roads = 0;
+	__int8 distance_from_left_edge = 0;
+	__int8 road_width = 0;
+
+	for (int i = 0; i < current_row; i++)
+	{
+		fread(&number_of_roads, sizeof(__int8), 1, file);
+		for (int j = 0; j < number_of_roads; j++)
+		{
+			fseek(file, 2, SEEK_CUR);
+		}
+	}
+
+	fread(&number_of_roads, sizeof(__int8), 1, file);
+	for (int i = 0; i < number_of_roads; i++)
+	{
+		fread(&distance_from_left_edge, sizeof(__int8), 1, file);
+		fread(&road_width, sizeof(__int8), 1, file);
+		distance.add(distance_from_left_edge);
+		width.add(road_width);
+	}
+
+	fclose(file);
+}
