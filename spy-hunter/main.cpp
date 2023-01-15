@@ -2,6 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include <crtdbg.h>
 
 #include "./SDL2-2.0.10/include/SDL.h"
 #include "./SDL2-2.0.10/include/SDL_main.h"
@@ -17,9 +18,10 @@ void init(SDL_Window*& window, int screen_width, int screen_height, float screen
 		printf("SDL_Init error");
 		exit(1);
 	}
-
-	window = SDL_CreateWindow("Spy Hunter", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+	
+	window = SDL_CreateWindow("Adrian Sciepura 193350", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		screen_width * screen_scale, screen_height * screen_scale, SDL_WINDOW_SHOWN);
+
 	if (window == nullptr)
 	{
 		SDL_Quit();
@@ -34,7 +36,7 @@ void init(SDL_Window*& window, int screen_width, int screen_height, float screen
 		printf("SDL_Renderer error"); 
 		exit(1);
 	}
-	//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+
 	SDL_RenderSetLogicalSize(Helper::renderer, screen_width, screen_height);
 }
 
@@ -46,7 +48,7 @@ int main(int argc, char** argv)
 	{
 		if (strcmp(argv[1], "-map_editor") == 0)
 		{
-			init(window, 850, 500, Helper::SCREEN_SCALE);
+			init(Helper::window, 850, 500, Helper::SCREEN_SCALE);
 			printf("MAP EDITOR \n");
 			Map_Editor* map_editor = Map_Editor::get_instance();
 			map_editor->run();
@@ -55,16 +57,16 @@ int main(int argc, char** argv)
 	}
 	else
 	{
-		init(window, Helper::SCREEN_WIDTH, Helper::SCREEN_HEIGHT, Helper::SCREEN_SCALE);
+		init(Helper::window, Helper::SCREEN_WIDTH, Helper::SCREEN_HEIGHT, Helper::SCREEN_SCALE);
 		SDL_ShowCursor(SDL_DISABLE);
 		Game_Manager* game = Game_Manager::get_instance();
 		game->run();
-		//game->destroy_instance();
+		game->destroy_instance();
 	}
 
 	SDL_DestroyRenderer(Helper::renderer);
-	SDL_DestroyWindow(window);
+	SDL_DestroyWindow(Helper::window);
 	SDL_Quit();
-	//_CrtDumpMemoryLeaks();
+	_CrtDumpMemoryLeaks();
 	return 0;
 };
