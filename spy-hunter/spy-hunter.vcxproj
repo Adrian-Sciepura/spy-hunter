@@ -128,10 +128,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AI_Vehicle.cpp" />
     <ClCompile Include="Asset_Manager.cpp" />
     <ClCompile Include="Box_Collider.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera_Manager.cpp" />
     <ClCompile Include="Dynamic_String.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game_Manager.cpp" />
     <ClCompile Include="Helper.cpp" />
@@ -139,6 +142,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map_Editor.cpp" />
     <ClCompile Include="Map_Manager.cpp" />
+    <ClCompile Include="Neutral.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Time_Manager.cpp" />
@@ -146,17 +150,21 @@
     <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AI_Vehicle.h" />
     <ClInclude Include="Asset_Manager.h" />
     <ClInclude Include="Box_Collider.h" />
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera_Manager.h" />
     <ClInclude Include="Dynamic_Array.h" />
     <ClInclude Include="Dynamic_String.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game_Manager.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="Input_Manager.h" />
     <ClInclude Include="Map_Editor.h" />
     <ClInclude Include="Map_Manager.h" />
+    <ClInclude Include="Neutral.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Time_Manager.h" />
